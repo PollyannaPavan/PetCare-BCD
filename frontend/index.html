@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PetCare: gerenciamento de tutores e cuidados veterinários.">
+    <title>PetCare | Gestão veterinária</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="#inicio">
+            <span class="brand-icon">🐾</span>
+            <span>PetCare<small>Gestão veterinária</small></span>
+        </a>
+
+        <p class="menu-title">MENU PRINCIPAL</p>
+
+        <nav class="navigation" aria-label="Navegação principal">
+            <a class="nav-link active" href="#inicio"><span>⌂</span> Visão geral</a>
+            <a class="nav-link" href="#tutores"><span>♧</span> Tutores</a>
+            <a class="nav-link" href="#animais"><span>♡</span> Animais</a>
+            <a class="nav-link" href="#veterinarios"><span>✚</span> Veterinários</a>
+            <a class="nav-link" href="#consultas"><span>▣</span> Consultas</a>
+        </nav>
+
+        <div class="sidebar-note">
+            <span class="note-icon">♡</span>
+            <strong>Cuidado em cada detalhe</strong>
+            <p>Organize as informações e cuide de cada pet com carinho.</p>
+        </div>
+
+        <p class="sidebar-footer">PetCare · Projeto acadêmico</p>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">SEU ESPAÇO DE CUIDADO PET</p>
+                <h1>Olá! Bem-vinda ao PetCare 🐶</h1>
+                <p class="subtitle">
+                    Gerencie os cadastros e acompanhe a organização da clínica.
+                </p>
+            </div>
+            <div class="topbar-mark" aria-hidden="true">🐾</div>
+        </header>
+
+        <section id="inicio" class="section overview-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">TUDO EM UM SÓ LUGAR</p>
+                    <h2>Visão geral</h2>
+                </div>
+            </div>
+
+            <div class="summary-grid">
+                <article class="summary-card">
+                    <div class="summary-icon icon-green">♧</div>
+                    <div>
+                        <p>Tutores cadastrados</p>
+                        <strong id="tutor-count">—</strong>
+                        <small id="tutor-count-note">Aguardando API</small>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-icon icon-blue">♡</div>
+                    <div>
+                        <p>Animais</p>
+                        <strong>—</strong>
+                        <small>API ainda não disponível</small>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-icon icon-purple">✚</div>
+                    <div>
+                        <p>Veterinários</p>
+                        <strong>—</strong>
+                        <small>API ainda não disponível</small>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-icon icon-orange">▣</div>
+                    <div>
+                        <p>Consultas</p>
+                        <strong>—</strong>
+                        <small>API ainda não disponível</small>
+                    </div>
+                </article>
+            </div>
+
+            <div class="info-banner">
+                <span class="info-symbol">i</span>
+                <p>
+                    <strong>Sobre os dados:</strong>
+                    os tutores são carregados pela API. As outras áreas serão
+                    integradas quando seus endpoints estiverem disponíveis.
+                </p>
+            </div>
+        </section>
+
+        <section id="tutores" class="section content-panel">
+            <div class="section-heading panel-heading">
+                <div>
+                    <p class="eyebrow">CADASTRO E MANUTENÇÃO</p>
+                    <h2>Tutores</h2>
+                    <p class="section-description">
+                        Consulte, cadastre, edite ou remova os responsáveis pelos animais.
+                    </p>
+                </div>
+                <button type="button" class="button button-primary" id="new-tutor-button">
+                    ＋ Novo tutor
+                </button>
+            </div>
+
+            <div id="feedback" class="feedback" role="status"
+                aria-live="polite" hidden></div>
+
+            <div class="toolbar">
+                <label class="search-box" for="search-tutors">
+                    <span aria-hidden="true">⌕</span>
+                    <input id="search-tutors" type="search"
+                        placeholder="Buscar por nome, telefone ou e-mail">
+                </label>
+
+                <button type="button" class="button button-secondary" id="refresh-button">
+                    ↻ Atualizar lista
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>E-mail</th>
+                            <th class="actions-heading">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tutors-table-body">
+                        <tr>
+                            <td colspan="4" class="table-message">
+                                Carregue a lista para consultar os tutores da API.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <span id="table-count">Nenhum registro carregado</span>
+                <span>Dados fornecidos pela API PetCare</span>
+            </div>
+        </section>
+
+        <section id="animais" class="section content-panel secondary-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">CADASTROS</p>
+                    <h2>Animais</h2>
+                </div>
+                <span class="status-pill status-pending">API pendente</span>
+            </div>
+            <p class="section-description">
+                Aqui poderão aparecer nome, espécie, raça, nascimento e tutor responsável.
+            </p>
+            <div class="empty-state">
+                <span>♡</span>
+                <strong>Área de animais em preparação</strong>
+                <p>Os dados serão exibidos quando a API de animais estiver integrada.</p>
+            </div>
+        </section>
+
+        <section id="veterinarios" class="section content-panel secondary-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">EQUIPE</p>
+                    <h2>Veterinários</h2>
+                </div>
+                <span class="status-pill status-pending">API pendente</span>
+            </div>
+            <p class="section-description">
+                Consulte os profissionais da clínica e seus registros CRMV.
+            </p>
+            <div class="empty-state">
+                <span>✚</span>
+                <strong>Área de veterinários em preparação</strong>
+                <p>A integração será feita quando a API correspondente estiver pronta.</p>
+            </div>
+        </section>
+
+        <section id="consultas" class="section content-panel secondary-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">AGENDA</p>
+                    <h2>Consultas veterinárias</h2>
+                </div>
+                <span class="status-pill status-pending">API pendente</span>
+            </div>
+            <p class="section-description">
+                Organize datas, animais, veterinários, motivos e status das consultas.
+            </p>
+            <div class="empty-state">
+                <span>♡</span>
+                <strong>Agenda em preparação</strong>
+                <p>As consultas aparecerão aqui quando a API estiver conectada.</p>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <span>PetCare · Sistema de gerenciamento veterinário</span>
+            <span>Feito para cuidar dos pets com carinho ♡</span>
+        </footer>
+    </main>
+
+    <dialog id="tutor-dialog" class="tutor-dialog">
+        <form id="tutor-form">
+            <div class="dialog-heading">
+                <div>
+                    <p class="eyebrow">DADOS DO RESPONSÁVEL</p>
+                    <h2 id="dialog-title">Novo tutor</h2>
+                </div>
+                <button type="button" class="close-button" id="close-dialog"
+                    aria-label="Fechar">×</button>
+            </div>
+
+            <p class="dialog-description">
+                Preencha os campos abaixo. Os dados serão enviados para a API.
+            </p>
+
+            <input type="hidden" id="tutor-id">
+
+            <label for="tutor-name">Nome completo <span>*</span></label>
+            <input id="tutor-name" name="nome" type="text" maxlength="120"
+                required placeholder="Ex.: Maria da Silva">
+
+            <label for="tutor-phone">Telefone <span>*</span></label>
+            <input id="tutor-phone" name="telefone" type="tel" maxlength="30"
+                required placeholder="Ex.: (19) 99999-9999">
+
+            <label for="tutor-email">E-mail <span>*</span></label>
+            <input id="tutor-email" name="email" type="email" maxlength="150"
+                required placeholder="Ex.: maria@email.com">
+
+            <div class="dialog-actions">
+                <button type="button" class="button button-secondary" id="cancel-dialog">
+                    Cancelar
+                </button>
+                <button type="submit" class="button button-primary" id="save-tutor-button">
+                    Salvar tutor
+                </button>
+            </div>
+
+            <p id="form-feedback" class="form-feedback"
+                role="status" aria-live="polite" hidden></p>
+        </form>
+    </dialog>
+</body>
+</html>
