@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinários - PetCare</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>🐾 PetCare</h1>
+    <p>Gerenciamento de veterinários</p>
+</header>
+
+<nav>
+    <a href="index.html">Início</a>
+    <a href="tutores.html">Tutores</a>
+    <a href="veterinarios.html">Veterinários</a>
+    <a href="animais.html">Animais</a>
+    <a href="consultas.html">Consultas</a>
+</nav>
+
+<main>
+    <section>
+        <h2>Cadastro de Veterinários</h2>
+
+        <form id="formVeterinario">
+            <input type="hidden" id="veterinarioId">
+
+            <input type="text" id="vetNome" placeholder="Nome" required>
+            <input type="text" id="vetCrmv" placeholder="CRMV" required>
+            <input type="text" id="vetTelefone" placeholder="Telefone" required>
+
+            <button type="submit">Salvar</button>
+            <button type="button" onclick="limparVeterinario()">Limpar</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Lista de Veterinários</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CRMV</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaVeterinarios"></tbody>
+        </table>
+    </section>
+</main>
+
+<footer>PetCare - Projeto Integrador</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

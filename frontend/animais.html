@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animais - PetCare</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>🐾 PetCare</h1>
+    <p>Gerenciamento de animais</p>
+</header>
+
+<nav>
+    <a href="index.html">Início</a>
+    <a href="tutores.html">Tutores</a>
+    <a href="veterinarios.html">Veterinários</a>
+    <a href="animais.html">Animais</a>
+    <a href="consultas.html">Consultas</a>
+</nav>
+
+<main>
+    <section>
+        <h2>Cadastro de Animais</h2>
+
+        <form id="formAnimal">
+            <input type="hidden" id="animalId">
+
+            <input type="text" id="animalNome" placeholder="Nome" required>
+            <input type="text" id="animalEspecie" placeholder="Espécie" required>
+            <input type="text" id="animalRaca" placeholder="Raça" required>
+            <input type="date" id="animalNascimento" required>
+
+            <select id="animalTutor" required>
+                <option value="">Selecione o tutor</option>
+            </select>
+
+            <button type="submit">Salvar</button>
+            <button type="button" onclick="limparAnimal()">Limpar</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Lista de Animais</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Espécie</th>
+                    <th>Raça</th>
+                    <th>Nascimento</th>
+                    <th>Tutor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaAnimais"></tbody>
+        </table>
+    </section>
+</main>
+
+<footer>PetCare - Projeto Integrador</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
