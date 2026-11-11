@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Veterinário | PetCare</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="painel-header">
+    <h1>PetCare</h1>
+    <button onclick="sair()">Sair</button>
+</header>
+
+<main class="painel-container">
+
+    <section>
+        <h2>Bem-vindo(a), <span id="nomeUsuario"></span>!</h2>
+        <p>Confira as consultas e os pets que você irá atender.</p>
+    </section>
+
+    <section>
+        <h2>Minhas consultas</h2>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pet</th>
+                        <th>Espécie</th>
+                        <th>Raça</th>
+                        <th>Tutor</th>
+                        <th>Telefone</th>
+                        <th>Data</th>
+                        <th>Motivo</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="listaConsultas"></tbody>
+            </table>
+        </div>
+
+        <p id="mensagemConsultas"></p>
+    </section>
+
+</main>
+
+<script>
+async function carregarPainel() {
+    const sessao = await fetch("../api/sessao.php");
+    
+    if (!sessao.ok) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const usuario = await sessao.json();
+
+    if (usuario.tipo !== "veterinario") {
+        window.location.href = "login.html";
+        return;
+    }
+
+    document.getElementById("nomeUsuario").textContent = usuario.nome;
+
+    const resposta = await fetch("../api/painel-veterinario.php");
+    const consultas = await resposta.json();
+
+    const lista = document.getElementById("listaConsultas");
+    const mensagem = document.getElementById("mensagemConsultas");
+
+    lista.innerHTML = "";
+
+    if (!resposta.ok) {
+        mensagem.textContent = consultas.erro || "Não foi possível carregar as consultas.";
+        return;
+    }
+
+    if (consultas.length === 0) {
+        mensagem.textContent = "Você ainda não possui consultas agendadas.";
+        return;
+    }
+
+    consultas.forEach(consulta => {
+        const linha = document.createElement("tr");
+
+        [
+            consulta.animal,
+            consulta.especie,
+            consulta.raca,
+            consulta.tutor,
+            consulta.telefone,
+            consulta.data_consulta,
+            consulta.motivo,
+            consulta.status
+        ].forEach(valor => {
+            const coluna = document.createElement("td");
+            coluna.textContent = valor ?? "-";
+            linha.appendChild(coluna);
+        });
+
+        lista.appendChild(linha);
+    });
+}
+
+async function sair() {
+    await fetch("../api/sessao.php", {
+        method: "POST"
+    });
+
+    window.location.href = "login.html";
+}
+
+carregarPainel();
+</script>
+
+</body>
+</html>

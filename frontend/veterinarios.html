@@ -9,8 +9,13 @@
 <body>
 
 <header>
-    <h1>🐾 PetCare</h1>
-    <p>Gerenciamento de veterinários</p>
+    <div class="logo">
+        <img src="Imagens/logo.png" alt="Logo da Clínica Veterinária PetCare">
+        <div>
+            <h1>PetCare</h1>
+            <p>Gerenciamento de veterinários</p>
+        </div>
+    </div>
 </header>
 
 <nav>
@@ -28,9 +33,21 @@
         <form id="formVeterinario">
             <input type="hidden" id="veterinarioId">
 
-            <input type="text" id="vetNome" placeholder="Nome" required>
-            <input type="text" id="vetCrmv" placeholder="CRMV" required>
-            <input type="text" id="vetTelefone" placeholder="Telefone" required>
+            <input type="text" id="vetNome"
+                placeholder="Nome" required>
+
+            <input type="text" id="vetCrmv"
+                placeholder="CRMV" required>
+
+            <input type="text" id="vetTelefone"
+                placeholder="Telefone" required>
+
+            <input type="email" id="vetEmail"
+                placeholder="E-mail" required>
+
+            <input type="password" id="vetSenha"
+                placeholder="Senha para acessar o sistema"
+                minlength="6">
 
             <button type="submit">Salvar</button>
             <button type="button" onclick="limparVeterinario()">Limpar</button>
@@ -47,6 +64,7 @@
                     <th>Nome</th>
                     <th>CRMV</th>
                     <th>Telefone</th>
+                    <th>E-mail</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -55,7 +73,11 @@
     </section>
 </main>
 
-<footer>PetCare - Projeto Integrador</footer>
+<footer>
+    <h3>PetCare</h3>
+    <p>Clínica Veterinária | Cuidado e carinho com seu pet.</p>
+    <small>© 2026 PetCare - Todos os direitos reservados.</small>
+</footer>
 
 <script src="script.js"></script>
 </body>

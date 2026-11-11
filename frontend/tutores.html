@@ -9,8 +9,13 @@
 <body>
 
 <header>
-    <h1>🐾 PetCare</h1>
-    <p>Gerenciamento de tutores</p>
+    <div class="logo">
+        <img src="Imagens/logo.png" alt="Logo da Clínica Veterinária PetCare">
+        <div>
+            <h1>PetCare</h1>
+            <p>Gerenciamento de tutores</p>
+        </div>
+    </div>
 </header>
 
 <nav>
@@ -28,9 +33,18 @@
         <form id="formTutor">
             <input type="hidden" id="tutorId">
 
-            <input type="text" id="tutorNome" placeholder="Nome" required>
-            <input type="text" id="tutorTelefone" placeholder="Telefone" required>
-            <input type="email" id="tutorEmail" placeholder="E-mail" required>
+            <input type="text" id="tutorNome"
+                placeholder="Nome" required>
+
+            <input type="text" id="tutorTelefone"
+                placeholder="Telefone" required>
+
+            <input type="email" id="tutorEmail"
+                placeholder="E-mail" required>
+
+            <input type="password" id="tutorSenha"
+                placeholder="Senha para acessar o sistema"
+                minlength="6">
 
             <button type="submit">Salvar</button>
             <button type="button" onclick="limparTutor()">Limpar</button>
@@ -55,7 +69,11 @@
     </section>
 </main>
 
-<footer>PetCare - Projeto Integrador</footer>
+<footer>
+    <h3>PetCare</h3>
+    <p>Clínica Veterinária | Cuidado e carinho com seu pet.</p>
+    <small>© 2026 PetCare - Todos os direitos reservados.</small>
+</footer>
 
 <script src="script.js"></script>
 </body>

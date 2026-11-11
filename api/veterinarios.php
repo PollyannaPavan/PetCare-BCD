@@ -14,34 +14,40 @@ require "conexao.php";
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 
-// Verifica se o método é POST
+// POST - Cadastrar veterinário
 if ($metodo == "POST") {
-    $json = file_get_contents("php://input");
-    $dados = json_decode($json, true);
+    $dados = json_decode(file_get_contents("php://input"), true);
 
-    $sql = "INSERT INTO veterinarios (nome, crmv, telefone)
-            VALUES (?, ?, ?)";
+    if (empty($dados["email"]) || empty($dados["senha"])) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Informe o e-mail e a senha!"]);
+        exit;
+    }
+
+    $senha = password_hash($dados["senha"], PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO veterinarios (nome, crmv, telefone, email, senha)
+            VALUES (?, ?, ?, ?, ?)";
 
     $comando = $pdo->prepare($sql);
     $comando->execute([
         $dados["nome"],
         $dados["crmv"],
-        $dados["telefone"]
+        $dados["telefone"],
+        $dados["email"],
+        $senha
     ]);
 
     echo json_encode(["Mensagem" => "Veterinário cadastrado!"]);
 }
 
-// Verifica se o método é GET
+// GET - Consultar veterinários
 if ($metodo == "GET") {
-
-    // Busca veterinário pelo ID
     if (isset($_GET["id"])) {
-        $id = $_GET["id"];
-
-        $sql = "SELECT * FROM veterinarios WHERE id = ?";
+        $sql = "SELECT id, nome, crmv, telefone, email
+                FROM veterinarios WHERE id = ?";
         $comando = $pdo->prepare($sql);
-        $comando->execute([$id]);
+        $comando->execute([$_GET["id"]]);
 
         $veterinario = $comando->fetch(PDO::FETCH_ASSOC);
 
@@ -51,44 +57,58 @@ if ($metodo == "GET") {
             http_response_code(404);
             echo json_encode(["Mensagem" => "Veterinário não encontrado!"]);
         }
-
-    // Busca todos os veterinários
     } else {
-        $sql = "SELECT * FROM veterinarios ORDER BY id";
+        $sql = "SELECT id, nome, crmv, telefone, email
+                FROM veterinarios ORDER BY id";
         $comando = $pdo->query($sql);
-        $veterinarios = $comando->fetchAll(PDO::FETCH_ASSOC);
-
-        echo json_encode($veterinarios);
+        echo json_encode($comando->fetchAll(PDO::FETCH_ASSOC));
     }
 }
 
-// Verifica se o método é PUT
+// PUT - Atualizar veterinário
 if ($metodo == "PUT") {
-    $json = file_get_contents("php://input");
-    $dados = json_decode($json, true);
+    $dados = json_decode(file_get_contents("php://input"), true);
 
-    $sql = "UPDATE veterinarios
-            SET nome = ?, crmv = ?, telefone = ?
-            WHERE id = ?";
+    if (!empty($dados["senha"])) {
+        $senha = password_hash($dados["senha"], PASSWORD_DEFAULT);
+
+        $sql = "UPDATE veterinarios
+                SET nome = ?, crmv = ?, telefone = ?, email = ?, senha = ?
+                WHERE id = ?";
+
+        $valores = [
+            $dados["nome"],
+            $dados["crmv"],
+            $dados["telefone"],
+            $dados["email"],
+            $senha,
+            $dados["id"]
+        ];
+    } else {
+        $sql = "UPDATE veterinarios
+                SET nome = ?, crmv = ?, telefone = ?, email = ?
+                WHERE id = ?";
+
+        $valores = [
+            $dados["nome"],
+            $dados["crmv"],
+            $dados["telefone"],
+            $dados["email"],
+            $dados["id"]
+        ];
+    }
 
     $comando = $pdo->prepare($sql);
-    $comando->execute([
-        $dados["nome"],
-        $dados["crmv"],
-        $dados["telefone"],
-        $dados["id"]
-    ]);
+    $comando->execute($valores);
 
     echo json_encode(["Mensagem" => "Veterinário atualizado!"]);
 }
 
-// Verifica se o método é DELETE
+// DELETE - Excluir veterinário
 if ($metodo == "DELETE") {
-    $json = file_get_contents("php://input");
-    $dados = json_decode($json, true);
+    $dados = json_decode(file_get_contents("php://input"), true);
 
     $sql = "DELETE FROM veterinarios WHERE id = ?";
-
     $comando = $pdo->prepare($sql);
     $comando->execute([$dados["id"]]);
 
