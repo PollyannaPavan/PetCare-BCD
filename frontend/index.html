@@ -33,12 +33,17 @@
     <section class="boas-vindas">
         <div class="texto-boas-vindas">
             <span class="subtitulo">CUIDADO E CARINHO EM CADA ATENDIMENTO</span>
+
             <h2>Bem-vindo ao PetCare!</h2>
+
             <p>
                 Um espaço dedicado à saúde e ao bem-estar dos animais.
                 Gerencie os tutores, os pets e as consultas da nossa clínica.
             </p>
-            <a href="#cadastro" class="botao-boas-vindas">Cadastrar tutor</a>
+
+            <a href="#cadastro" class="botao-boas-vindas">
+                Cadastrar tutor
+            </a>
         </div>
     </section>
 
@@ -50,7 +55,8 @@
         </div>
 
         <div class="carrossel">
-            <button type="button" id="anterior" class="seta" aria-label="Imagem anterior">&#10094;</button>
+            <button type="button" id="anterior" class="seta"
+                aria-label="Imagem anterior">&#10094;</button>
 
             <div class="janela-carrossel">
                 <div class="imagens-carrossel">
@@ -64,7 +70,8 @@
                 </div>
             </div>
 
-            <button type="button" id="proximo" class="seta" aria-label="Próxima imagem">&#10095;</button>
+            <button type="button" id="proximo" class="seta"
+                aria-label="Próxima imagem">&#10095;</button>
         </div>
 
         <div class="indicadores" id="indicadores"></div>
@@ -84,22 +91,26 @@
 
             <div class="campo">
                 <label for="tutorNome">Nome completo</label>
-                <input type="text" id="tutorNome" placeholder="Digite o nome" required>
+                <input type="text" id="tutorNome"
+                    placeholder="Digite o nome" required>
             </div>
 
             <div class="campo">
                 <label for="tutorTelefone">Telefone</label>
-                <input type="text" id="tutorTelefone" placeholder="Digite o telefone" required>
+                <input type="text" id="tutorTelefone"
+                    placeholder="Digite o telefone" required>
             </div>
 
             <div class="campo">
                 <label for="tutorEmail">E-mail</label>
-                <input type="email" id="tutorEmail" placeholder="Digite o e-mail" required>
+                <input type="email" id="tutorEmail"
+                    placeholder="Digite o e-mail" required>
             </div>
 
             <div class="botoes">
                 <button type="submit">Salvar tutor</button>
-                <button type="button" class="secundario" onclick="limparTutor()">Limpar campos</button>
+                <button type="button" class="secundario"
+                    onclick="limparTutor()">Limpar campos</button>
             </div>
         </form>
     </section>
@@ -124,6 +135,7 @@
                         <th>Ações</th>
                     </tr>
                 </thead>
+
                 <tbody id="listaTutores"></tbody>
             </table>
         </div>

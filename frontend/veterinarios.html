@@ -27,7 +27,7 @@
 </nav>
 
 <main>
-    <section>
+    <section id="cadastro">
         <h2>Cadastro de Veterinários</h2>
 
         <form id="formVeterinario">
@@ -42,15 +42,11 @@
             <input type="text" id="vetTelefone"
                 placeholder="Telefone" required>
 
-            <input type="email" id="vetEmail"
-                placeholder="E-mail" required>
-
-            <input type="password" id="vetSenha"
-                placeholder="Senha para acessar o sistema"
-                minlength="6">
-
             <button type="submit">Salvar</button>
-            <button type="button" onclick="limparVeterinario()">Limpar</button>
+
+            <button type="button" onclick="limparVeterinario()">
+                Limpar
+            </button>
         </form>
     </section>
 
@@ -64,10 +60,10 @@
                     <th>Nome</th>
                     <th>CRMV</th>
                     <th>Telefone</th>
-                    <th>E-mail</th>
                     <th>Ações</th>
                 </tr>
             </thead>
+
             <tbody id="listaVeterinarios"></tbody>
         </table>
     </section>
@@ -79,6 +75,6 @@
     <small>© 2026 PetCare - Todos os direitos reservados.</small>
 </footer>
 
-<script src="script.js"></script>
+<script src="veterinarios.js"></script>
 </body>
 </html>

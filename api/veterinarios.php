@@ -18,34 +18,31 @@ $metodo = $_SERVER["REQUEST_METHOD"];
 if ($metodo == "POST") {
     $dados = json_decode(file_get_contents("php://input"), true);
 
-    if (empty($dados["email"]) || empty($dados["senha"])) {
+    if (empty($dados["nome"]) || empty($dados["crmv"]) || empty($dados["telefone"])) {
         http_response_code(400);
-        echo json_encode(["Mensagem" => "Informe o e-mail e a senha!"]);
+        echo json_encode(["Mensagem" => "Preencha todos os campos!"]);
         exit;
     }
 
-    $senha = password_hash($dados["senha"], PASSWORD_DEFAULT);
-
-    $sql = "INSERT INTO veterinarios (nome, crmv, telefone, email, senha)
-            VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO veterinarios (nome, crmv, telefone)
+            VALUES (?, ?, ?)";
 
     $comando = $pdo->prepare($sql);
     $comando->execute([
         $dados["nome"],
         $dados["crmv"],
-        $dados["telefone"],
-        $dados["email"],
-        $senha
+        $dados["telefone"]
     ]);
 
     echo json_encode(["Mensagem" => "Veterinário cadastrado!"]);
 }
 
 // GET - Consultar veterinários
-if ($metodo == "GET") {
+elseif ($metodo == "GET") {
     if (isset($_GET["id"])) {
-        $sql = "SELECT id, nome, crmv, telefone, email
+        $sql = "SELECT id, nome, crmv, telefone
                 FROM veterinarios WHERE id = ?";
+
         $comando = $pdo->prepare($sql);
         $comando->execute([$_GET["id"]]);
 
@@ -58,59 +55,56 @@ if ($metodo == "GET") {
             echo json_encode(["Mensagem" => "Veterinário não encontrado!"]);
         }
     } else {
-        $sql = "SELECT id, nome, crmv, telefone, email
+        $sql = "SELECT id, nome, crmv, telefone
                 FROM veterinarios ORDER BY id";
+
         $comando = $pdo->query($sql);
         echo json_encode($comando->fetchAll(PDO::FETCH_ASSOC));
     }
 }
 
 // PUT - Atualizar veterinário
-if ($metodo == "PUT") {
+elseif ($metodo == "PUT") {
     $dados = json_decode(file_get_contents("php://input"), true);
 
-    if (!empty($dados["senha"])) {
-        $senha = password_hash($dados["senha"], PASSWORD_DEFAULT);
-
-        $sql = "UPDATE veterinarios
-                SET nome = ?, crmv = ?, telefone = ?, email = ?, senha = ?
-                WHERE id = ?";
-
-        $valores = [
-            $dados["nome"],
-            $dados["crmv"],
-            $dados["telefone"],
-            $dados["email"],
-            $senha,
-            $dados["id"]
-        ];
-    } else {
-        $sql = "UPDATE veterinarios
-                SET nome = ?, crmv = ?, telefone = ?, email = ?
-                WHERE id = ?";
-
-        $valores = [
-            $dados["nome"],
-            $dados["crmv"],
-            $dados["telefone"],
-            $dados["email"],
-            $dados["id"]
-        ];
+    if (empty($_GET["id"])) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Informe o ID do veterinário!"]);
+        exit;
     }
 
+    if (empty($dados["nome"]) || empty($dados["crmv"]) || empty($dados["telefone"])) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Preencha todos os campos!"]);
+        exit;
+    }
+
+    $sql = "UPDATE veterinarios
+            SET nome = ?, crmv = ?, telefone = ?
+            WHERE id = ?";
+
     $comando = $pdo->prepare($sql);
-    $comando->execute($valores);
+    $comando->execute([
+        $dados["nome"],
+        $dados["crmv"],
+        $dados["telefone"],
+        $_GET["id"]
+    ]);
 
     echo json_encode(["Mensagem" => "Veterinário atualizado!"]);
 }
 
 // DELETE - Excluir veterinário
-if ($metodo == "DELETE") {
-    $dados = json_decode(file_get_contents("php://input"), true);
+elseif ($metodo == "DELETE") {
+    if (empty($_GET["id"])) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Informe o ID do veterinário!"]);
+        exit;
+    }
 
     $sql = "DELETE FROM veterinarios WHERE id = ?";
     $comando = $pdo->prepare($sql);
-    $comando->execute([$dados["id"]]);
+    $comando->execute([$_GET["id"]]);
 
     echo json_encode(["Mensagem" => "Veterinário excluído!"]);
 }

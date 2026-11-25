@@ -6,18 +6,24 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     exit;
 }
 
 require "conexao.php";
 
 $metodo = $_SERVER["REQUEST_METHOD"];
+$id = isset($_GET["id"]) ? (int) $_GET["id"] : 0;
 
-// Verifica se o método é POST
-if ($metodo == "POST") {
-    $json = file_get_contents("php://input");
-    $dados = json_decode($json, true);
+// POST - Cadastrar animal
+if ($metodo === "POST") {
+    $dados = json_decode(file_get_contents("php://input"), true);
+
+    if (empty($dados["nome"]) || empty($dados["especie"]) || empty($dados["tutor_id"])) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Preencha os campos obrigatórios!"]);
+        exit;
+    }
 
     $sql = "INSERT INTO animais
             (nome, especie, raca, data_nascimento, tutor_id)
@@ -27,48 +33,64 @@ if ($metodo == "POST") {
     $comando->execute([
         $dados["nome"],
         $dados["especie"],
-        $dados["raca"],
-        $dados["data_nascimento"],
+        $dados["raca"] ?? null,
+        !empty($dados["data_nascimento"]) ? $dados["data_nascimento"] : null,
         $dados["tutor_id"]
     ]);
 
     echo json_encode(["Mensagem" => "Animal cadastrado!"]);
+    exit;
 }
 
-// Verifica se o método é GET
-if ($metodo == "GET") {
-
-    // Busca animal pelo ID
-    if (isset($_GET["id"])) {
-        $id = $_GET["id"];
-
+// GET - Buscar animal por ID ou listar todos
+if ($metodo === "GET") {
+    if ($id > 0) {
         $sql = "SELECT * FROM animais WHERE id = ?";
         $comando = $pdo->prepare($sql);
         $comando->execute([$id]);
 
         $animal = $comando->fetch(PDO::FETCH_ASSOC);
 
-        if ($animal) {
-            echo json_encode($animal);
-        } else {
+        if (!$animal) {
             http_response_code(404);
             echo json_encode(["Mensagem" => "Animal não encontrado!"]);
+            exit;
         }
 
-    // Busca todos os animais
-    } else {
-        $sql = "SELECT * FROM animais ORDER BY id";
-        $comando = $pdo->query($sql);
-        $animais = $comando->fetchAll(PDO::FETCH_ASSOC);
-
-        echo json_encode($animais);
+        echo json_encode($animal);
+        exit;
     }
+
+    $sql = "SELECT * FROM animais ORDER BY id";
+    $comando = $pdo->query($sql);
+    echo json_encode($comando->fetchAll(PDO::FETCH_ASSOC));
+    exit;
 }
 
-// Verifica se o método é PUT
-if ($metodo == "PUT") {
-    $json = file_get_contents("php://input");
-    $dados = json_decode($json, true);
+// PUT - Atualizar animal
+if ($metodo === "PUT") {
+    $dados = json_decode(file_get_contents("php://input"), true);
+
+    if ($id <= 0) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Informe o ID do animal na URL!"]);
+        exit;
+    }
+
+    if (empty($dados["nome"]) || empty($dados["especie"]) || empty($dados["tutor_id"])) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Preencha os campos obrigatórios!"]);
+        exit;
+    }
+
+    $verificar = $pdo->prepare("SELECT id FROM animais WHERE id = ?");
+    $verificar->execute([$id]);
+
+    if (!$verificar->fetch()) {
+        http_response_code(404);
+        echo json_encode(["Mensagem" => "Animal não encontrado!"]);
+        exit;
+    }
 
     $sql = "UPDATE animais
             SET nome = ?, especie = ?, raca = ?,
@@ -79,25 +101,38 @@ if ($metodo == "PUT") {
     $comando->execute([
         $dados["nome"],
         $dados["especie"],
-        $dados["raca"],
-        $dados["data_nascimento"],
+        $dados["raca"] ?? null,
+        !empty($dados["data_nascimento"]) ? $dados["data_nascimento"] : null,
         $dados["tutor_id"],
-        $dados["id"]
+        $id
     ]);
 
     echo json_encode(["Mensagem" => "Animal atualizado!"]);
+    exit;
 }
 
-// Verifica se o método é DELETE
-if ($metodo == "DELETE") {
-    $json = file_get_contents("php://input");
-    $dados = json_decode($json, true);
+// DELETE - Excluir animal
+if ($metodo === "DELETE") {
+    if ($id <= 0) {
+        http_response_code(400);
+        echo json_encode(["Mensagem" => "Informe o ID do animal na URL!"]);
+        exit;
+    }
 
-    $sql = "DELETE FROM animais WHERE id = ?";
+    $comando = $pdo->prepare("DELETE FROM animais WHERE id = ?");
+    $comando->execute([$id]);
 
-    $comando = $pdo->prepare($sql);
-    $comando->execute([$dados["id"]]);
+    if ($comando->rowCount() === 0) {
+        http_response_code(404);
+        echo json_encode(["Mensagem" => "Animal não encontrado!"]);
+        exit;
+    }
 
     echo json_encode(["Mensagem" => "Animal excluído!"]);
+    exit;
 }
+
+// Método não permitido
+http_response_code(405);
+echo json_encode(["Mensagem" => "Método não permitido!"]);
 ?>
